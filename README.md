@@ -27,7 +27,8 @@ Be the other gender, live on a video call. One snapshot of you, swapped to the o
 [Echo](https://github.com/CursedPrograms/Changeling-Echo) (voices) ·
 realtime: [Tiresias](https://github.com/CursedPrograms/Changeling-Tiresias-Realtime) ·
 [Chronos](https://github.com/CursedPrograms/Changeling-Chronos-Realtime) ·
-[Natio](https://github.com/CursedPrograms/Changeling-Natio-Realtime).*
+[Natio](https://github.com/CursedPrograms/Changeling-Natio-Realtime) ·
+[Cosmetics](https://github.com/CursedPrograms/Changeling-Cosmetics-Realtime).*
 
 ## Why a snapshot, not every frame
 
