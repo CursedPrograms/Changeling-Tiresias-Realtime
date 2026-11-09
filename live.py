@@ -2,7 +2,7 @@
 
 StyleGAN editing (Tiresias, Chronos, Natio) learns a face for a minute: far too slow for every frame of a call.
 So this does it once: take a snapshot of you (or pick a photo), the Changeling makes the new you from it, and
-Changeling CopyCat Realtime wears that new you live, on your own expressions, out to the call through the virtual
+Changeling Simia Realtime wears that new you live, on your own expressions, out to the call through the virtual
 camera (and your voice through Changeling Echo or its voice changer, if you like).
 
     run.bat                      the window
@@ -11,8 +11,8 @@ camera (and your voice through Changeling Echo or its voice changer, if you like
 
 Which Changeling this is comes from realtime.json ({"app": "Tiresias"}). This same file is in every
 Changeling *-Realtime repo; the master copy is in Changeling Studio's realtime/ (make_realtime.py copies it).
-It runs in the Changeling's own environment, so it needs nothing of its own: Changeling <App> and Changeling CopyCat
-Realtime next to it (as in Changeling Studio), or in CHANGELING_<APP>_DIR and COPYCAT_REALTIME_DIR.
+It runs in the Changeling's own environment, so it needs nothing of its own: Changeling <App> and Changeling Simia
+Realtime next to it (as in Changeling Studio), or in CHANGELING_<APP>_DIR and SIMIA_REALTIME_DIR.
 """
 import argparse
 import json
@@ -77,8 +77,8 @@ def _has_torch(env):
                 glob.glob(os.path.join(env, "lib", "python3*", "site-packages", "torch")))
 
 
-def copycat_dir():
-    folder = os.environ.get("COPYCAT_REALTIME_DIR") or os.path.join(STUDIO, "Changeling-CopyCat-Realtime")
+def simia_dir():
+    folder = os.environ.get("SIMIA_REALTIME_DIR") or os.path.join(STUDIO, "Changeling-Simia-Realtime")
     return folder if os.path.exists(os.path.join(folder, "app.py")) else None
 
 
@@ -169,7 +169,7 @@ class Window:
         self.camera = Camera(args.camera, args.source)
         self.you = None               # the snapshot (a path in made/)
         self.new_you = None           # what the Changeling made of it (a path in made/)
-        self.live = None              # CopyCat Realtime, while it runs
+        self.live = None              # Simia Realtime, while it runs
         self.make_proc = None
         self.countdown = 0
         self.state = {"busy": False, "done": 0, "total": 0, "stage": "", "t0": 0.0, "message": "", "detected": ""}
@@ -278,7 +278,7 @@ class Window:
         self.live_btn = ctk.CTkButton(side, text="Go live  (L)", height=42, font=ctk.CTkFont(size=15, weight="bold"),
                                       command=self.go_live)
         self.live_btn.pack(fill="x", padx=12, pady=(12, 4))
-        self.live_note = ctk.CTkLabel(side, text="Opens Changeling CopyCat Realtime wearing the new you: out to the "
+        self.live_note = ctk.CTkLabel(side, text="Opens Changeling Simia Realtime wearing the new you: out to the "
                                       "call through OBS Virtual Camera. Close it to come back here.",
                                       text_color="gray55", wraplength=270, justify="left")
         self.live_note.pack(anchor="w", padx=12)
@@ -358,8 +358,8 @@ class Window:
             missing.append(f"Changeling {APP}")
         elif app_python() is None:
             missing.append(f"Changeling {APP}'s environment (run its run.bat once)")
-        if copycat_dir() is None:
-            missing.append("Changeling CopyCat Realtime")
+        if simia_dir() is None:
+            missing.append("Changeling Simia Realtime")
         if missing:
             self.status.configure(text="Not found: " + ", ".join(missing) + ". Put them next to this folder "
                                   "(Changeling Studio's fetch.bat does it), or run this repo's run.bat.")
@@ -512,25 +512,25 @@ class Window:
         if not self.new_you:
             self.status.configure(text="First make the new you.")
             return
-        folder = copycat_dir()
+        folder = simia_dir()
         py = _python(folder, "venv")
         cmd = [py if os.path.exists(py) else sys.executable, "app.py", "--persona", self.new_you,
                "--camera", str(self.args.camera), "--voice", self.voice.get(), "--skin", str(int(self.skin.get()))]
         if self.phone.get():
-            cmd.append("--phone")             # CopyCat Realtime shows a QR code for the phone's page
+            cmd.append("--phone")             # Simia Realtime shows a QR code for the phone's page
         elif self.args.source:
             cmd += ["--source", self.args.source]
         if self.echo.get():
             cmd.append("--echo")
-        self.camera.stop()                      # CopyCat Realtime needs the camera
+        self.camera.stop()                      # Simia Realtime needs the camera
         self.live = subprocess.Popen(cmd, cwd=folder)
-        self.live_btn.configure(state="disabled", text="Live: close CopyCat Realtime to come back")
+        self.live_btn.configure(state="disabled", text="Live: close Simia Realtime to come back")
 
     # ---- the picture
     def show(self):
         if self.live is not None:
             frame = read_bgr(self.new_you) if self.new_you else None
-            note = "Live in Changeling CopyCat Realtime"
+            note = "Live in Changeling Simia Realtime"
         else:
             frame = self.camera.frame
             note = self.camera.error or ("" if frame is not None else "Waiting for the camera ...")
@@ -568,7 +568,7 @@ class Window:
 
 def main():
     ap = argparse.ArgumentParser(description=f"{NAME}: one snapshot of you, changed by Changeling {APP}, "
-                                 "worn live by Changeling CopyCat Realtime.")
+                                 "worn live by Changeling Simia Realtime.")
     ap.add_argument("--camera", type=int, default=0, help="which webcam (default 0)")
     ap.add_argument("--source", help="a photo or video instead of the webcam (for trying it out)")
     Window(ap.parse_args()).run()
