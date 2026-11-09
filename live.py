@@ -273,6 +273,8 @@ class Window:
         self.echo_sw.pack(anchor="w", padx=12, pady=3)
         if not echo_installed():
             self.echo_sw.configure(state="disabled", text="Echo: not installed")
+        self.phone = ctk.BooleanVar(value=False)
+        ctk.CTkSwitch(side, text="Phone as the camera", variable=self.phone).pack(anchor="w", padx=12, pady=3)
         self.live_btn = ctk.CTkButton(side, text="Go live  (L)", height=42, font=ctk.CTkFont(size=15, weight="bold"),
                                       command=self.go_live)
         self.live_btn.pack(fill="x", padx=12, pady=(12, 4))
@@ -514,7 +516,9 @@ class Window:
         py = _python(folder, "venv")
         cmd = [py if os.path.exists(py) else sys.executable, "app.py", "--persona", self.new_you,
                "--camera", str(self.args.camera), "--voice", self.voice.get(), "--skin", str(int(self.skin.get()))]
-        if self.args.source:
+        if self.phone.get():
+            cmd.append("--phone")             # CopyCat Realtime shows a QR code for the phone's page
+        elif self.args.source:
             cmd += ["--source", self.args.source]
         if self.echo.get():
             cmd.append("--echo")

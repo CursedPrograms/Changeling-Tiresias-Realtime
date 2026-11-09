@@ -53,7 +53,8 @@ it's the same face in every frame.
    (only on this PC) and listed under **Made before**.
 5. **3 · Live:** **Persona's skin** (70 to start: the new you's skin tone and fine detail, like Chronos's
    wrinkles, which the face swap alone would leave as yours), the **voice** (off, female, male; **Echo** for Changeling Echo's trained voices) and **Go live**
-   (L): CopyCat Realtime opens wearing the new you. In the call, pick **OBS Virtual Camera** as the camera (and
+   (L): CopyCat Realtime opens wearing the new you. **Phone as the camera**: CopyCat Realtime shows a QR code
+   instead; open it on your phone and its camera and microphone are the input (the PC still does the work). In the call, pick **OBS Virtual Camera** as the camera (and
    **CABLE Output** as the microphone). Close CopyCat Realtime to come back and make another.
 
 ![The window](assets/window.png)
