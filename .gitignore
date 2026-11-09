@@ -1,0 +1,4 @@
+# your snapshots and what was made of them stay on this PC
+made/
+__pycache__/
+*.pyc
