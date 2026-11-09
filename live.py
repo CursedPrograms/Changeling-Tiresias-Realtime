@@ -39,6 +39,20 @@ NAME = f"Changeling {APP} Realtime"
 GITHUB = f"https://github.com/CursedPrograms/Changeling-{APP}-Realtime"
 KOFI = "https://ko-fi.com/cursedentertainment"
 PINK = "#e0408a"
+
+BLUE, BLUE_HOVER = "#007ab7", "#005184"     # the Cursed site's blue: the important buttons, and "male"
+
+
+def gender_tint(seg):
+    """Colours a gender selector by what's picked: female pink, male blue, anything else the usual pink."""
+    def tint(value=None):
+        v = (value or seg.get() or "").lower()
+        colour = PINK if ("female" in v or "woman" in v) else BLUE if ("male" in v or v == "man") else PINK
+        seg.configure(selected_color=colour, selected_hover_color=colour)
+    old = seg.cget("command")
+    seg.configure(command=lambda v: (tint(v), old(v) if old else None))
+    tint()
+
 MADE = os.path.join(HERE, "made")
 QUALITY = {"Fast": "fast", "Balanced": "balanced", "Best": "best"}
 IMAGE_TYPES = [("Pictures", "*.png *.jpg *.jpeg *.webp *.bmp *.jfif"), ("All files", "*.*")]
@@ -246,7 +260,7 @@ class Window:
         ctk.CTkLabel(side, text="Balanced and Best learn your face first, so the new you still looks like you "
                      "(about 1 and 3 minutes). Fast takes seconds.", text_color="gray55", wraplength=270,
                      justify="left").pack(anchor="w", padx=12)
-        self.make_btn = ctk.CTkButton(side, text="Make the new you  (Enter)", height=40,
+        self.make_btn = ctk.CTkButton(side, fg_color=BLUE, hover_color=BLUE_HOVER, text="Make the new you  (Enter)", height=40,
                                       font=ctk.CTkFont(size=14, weight="bold"), command=self.make)
         self.make_btn.pack(fill="x", padx=12, pady=(12, 4))
         self.bar = ctk.CTkProgressBar(side, mode="determinate")
@@ -268,6 +282,7 @@ class Window:
         self.voice = ctk.CTkSegmentedButton(side, values=["off", "female", "male"])
         self.voice.set("off")
         self.voice.pack(fill="x", padx=12, pady=4)
+        gender_tint(self.voice)
         self.echo = ctk.BooleanVar(value=echo_installed())
         self.echo_sw = ctk.CTkSwitch(side, text="Echo: trained voices", variable=self.echo)
         self.echo_sw.pack(anchor="w", padx=12, pady=3)
@@ -275,7 +290,7 @@ class Window:
             self.echo_sw.configure(state="disabled", text="Echo: not installed")
         self.phone = ctk.BooleanVar(value=False)
         ctk.CTkSwitch(side, text="Phone as the camera", variable=self.phone).pack(anchor="w", padx=12, pady=3)
-        self.live_btn = ctk.CTkButton(side, text="Go live  (L)", height=42, font=ctk.CTkFont(size=15, weight="bold"),
+        self.live_btn = ctk.CTkButton(side, fg_color=BLUE, hover_color=BLUE_HOVER, text="Go live  (L)", height=42, font=ctk.CTkFont(size=15, weight="bold"),
                                       command=self.go_live)
         self.live_btn.pack(fill="x", padx=12, pady=(12, 4))
         self.live_note = ctk.CTkLabel(side, text="Opens Changeling Imago Realtime wearing the new you: out to the "
@@ -321,6 +336,7 @@ class Window:
         """Each Changeling's own choices (the same as in its window)."""
         if APP == "Tiresias":
             self.direction = self._segmented(side, "", ["Auto", "To female", "To male"], "Auto")
+            gender_tint(self.direction)
             self.strength = self._slider(side, "Strength", 25, 200, 100)
         elif APP == "Chronos":
             self.age = self._slider(side, "Age", -100, 100, 50, fmt="{:+d}")
