@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Changeling Tiresias Realtime runs in Changeling Tiresias's environment: it needs Changeling Tiresias and Changeling
-# Simia Realtime next to this folder (as in Changeling Studio). Missing ones are fetched here.
+# Imago Realtime next to this folder (as in Changeling Studio). Missing ones are fetched here.
 set -e
 cd "$(dirname "$0")"
 STUDIO="$(cd .. && pwd)"
-for a in Tiresias Simia-Realtime; do
+for a in Tiresias Imago-Realtime; do
     if [ ! -d "$STUDIO/Changeling-$a" ]; then
         echo "Getting Changeling $a ..."
         git clone "https://github.com/CursedPrograms/Changeling-$a" "$STUDIO/Changeling-$a"
